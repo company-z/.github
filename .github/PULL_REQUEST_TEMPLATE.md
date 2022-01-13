@@ -15,8 +15,6 @@ Include a summary of the change and which issue is fixed. Please also include re
 
 ## How Has This Been Tested?
 
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
-
 - [ ] Automated
 - [ ] Manual 
 
@@ -27,4 +25,3 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
 - [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged or noted in my PR.
