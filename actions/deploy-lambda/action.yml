@@ -1,0 +1,51 @@
+name: Deploy Subgraph
+
+description: Deploys a subgraph to aws lambda
+
+inputs:
+  environment:
+    required: true
+    description: environment
+  aws-access-key-id:
+    required: true
+    description: aws access key id
+  aws-secret-access-key:
+    required: true
+    description: aws secret access key
+  slack-webhook:
+    required: true
+    description: slack webhook url
+  npm-token:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - uses: aws-actions/setup-sam@v2
+      with:
+        version: 1.77.0
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: us-west-2
+    - uses: actions/cache@v3
+      with:
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-v2
+        path: |
+          **/.yarn
+          **/node_modules
+    - run: yarn
+      env:
+        GITHUB_NPM_TOKEN: ${{ inputs.npm-token }}
+      shell: bash
+    - run: yarn sam:build
+      env:
+        GITHUB_NPM_TOKEN: ${{ inputs.npm-token }}
+      shell: bash
+    - run: yarn sam:deploy --config-env=${{ inputs.environment }}
+      env:
+        GITHUB_NPM_TOKEN: ${{ inputs.npm-token }}
+      shell: bash

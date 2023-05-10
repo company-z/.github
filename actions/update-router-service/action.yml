@@ -1,0 +1,29 @@
+name: deploy-graph-router
+
+description: Updates the graph router service with a new deployment.
+
+inputs:
+  environment:
+    required: true
+    description: environment
+  aws-access-key-id:
+    required: true
+    description: aws access key id
+  aws-secret-access-key:
+    required: true
+    description: aws secret access key
+  slack-webhook:
+    required: true
+    description: slack webhook url
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: us-west-2
+    - run: aws ecs update-service --force-new-deployment --service router-${{ inputs.environment }} --cluster router-${{ inputs.environment }}
+      shell: bash
