@@ -1,4 +1,4 @@
-name: deploy-graph-router
+name: update-graph-router
 
 description: Updates the graph router service with a new deployment.
 
